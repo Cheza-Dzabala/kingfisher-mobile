@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kingfisher/models/kingfisher_user.dart';
+import 'package:kingfisher/notifiers/user_notifier.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_finish.dart';
+import 'package:kingfisher/services/locator.dart';
 import 'package:kingfisher/utils/constants.dart';
 import 'package:kingfisher/utils/decorations.dart';
 import 'package:kingfisher/utils/lists.dart';
@@ -15,10 +18,27 @@ class OnboardingLocation extends StatefulWidget {
 }
 
 class _OnboardingLocationState extends State<OnboardingLocation> {
+  ValueNotifier<KingfisherUser> _user = getIt<UserNotifier>().user;
   // Create a text controller for city of residence
   final _cityOfResidenceController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  _handleSubmit({@required BuildContext context}) {
+    if (!_formKey.currentState.validate()) {
+      return;
+    } else {
+      _user.value.cityOfResidence = _cityOfResidenceController.text;
+      Navigator.of(context).pushNamed(OnboardingFinish.id);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _cityOfResidenceController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +99,7 @@ class _OnboardingLocationState extends State<OnboardingLocation> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState.validate()) {
-                              return;
-                            } else {
-                              Navigator.of(context)
-                                  .pushNamed(OnboardingFinish.id);
-                            }
-                          },
+                          onPressed: () => _handleSubmit(context: context),
                           child: Text('NEXT'),
                         ),
                       )

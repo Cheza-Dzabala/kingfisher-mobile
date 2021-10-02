@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kingfisher/models/kingfisher_user.dart';
+import 'package:kingfisher/notifiers/user_notifier.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_location.dart';
+import 'package:kingfisher/services/locator.dart';
 import 'package:kingfisher/utils/constants.dart';
 import 'package:kingfisher/utils/decorations.dart';
 import 'package:kingfisher/widgets/app_bar.dart';
@@ -13,12 +16,25 @@ class OnboardingWelcome extends StatefulWidget {
 }
 
 class _OnboardingWelcomeState extends State<OnboardingWelcome> {
-  // Create Text Editing controllers for firt name, last name and phone number
+  ValueNotifier<KingfisherUser> _user = getIt<UserNotifier>().user;
+
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  _handleSubmit({@required BuildContext context}) {
+    if (!_formKey.currentState.validate()) {
+      return;
+    } else {
+      _user.value.firstName = _firstNameController.text;
+      _user.value.lastName = _lastNameController.text;
+      _user.value.phoneNumber = _phoneNumberController.text;
+
+      Navigator.of(context).pushNamed(OnboardingLocation.id);
+    }
+  }
 
   @override
   void dispose() {
@@ -102,6 +118,7 @@ class _OnboardingWelcomeState extends State<OnboardingWelcome> {
                       ),
                       TextFormField(
                         controller: _phoneNumberController,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: 'Phone Number',
                           labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -119,14 +136,7 @@ class _OnboardingWelcomeState extends State<OnboardingWelcome> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState.validate()) {
-                              return;
-                            } else {
-                              Navigator.of(context)
-                                  .pushNamed(OnboardingLocation.id);
-                            }
-                          },
+                          onPressed: () => _handleSubmit(context: context),
                           child: Text('NEXT'),
                         ),
                       )

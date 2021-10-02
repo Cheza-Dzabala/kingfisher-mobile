@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kingfisher/pages/landing.dart';
+import 'package:kingfisher/services/authentication_service.dart';
+import 'package:kingfisher/services/locator.dart';
 
 class Home extends StatefulWidget {
   // define a static id
@@ -10,12 +13,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _authenticationService = getIt<AuthenticationService>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Home'),
-      ),
+          child: ElevatedButton(
+        child: Text('Logout'),
+        onPressed: () async {
+          try {
+            await _authenticationService.logout();
+            Navigator.pushReplacementNamed(context, Landing.id);
+          } catch (e) {
+            print(e);
+          }
+        },
+      )),
     );
   }
 }

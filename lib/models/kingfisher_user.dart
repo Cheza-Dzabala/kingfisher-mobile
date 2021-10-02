@@ -1,4 +1,5 @@
 class KingfisherUser {
+  String id;
   String email;
   String firstName;
   String lastName;
@@ -7,6 +8,7 @@ class KingfisherUser {
   String dateOfBirth;
 
   KingfisherUser({
+    this.id,
     this.email,
     this.firstName,
     this.lastName,
@@ -17,6 +19,7 @@ class KingfisherUser {
 
   // Serialize to JSON
   Map<String, dynamic> toJson() => {
+        'id': id,
         'email': email,
         'first_name': firstName,
         'last_name': lastName,
@@ -27,6 +30,7 @@ class KingfisherUser {
 
   // Deserialize from JSON using factory
   factory KingfisherUser.fromJson(Map<String, dynamic> json) => KingfisherUser(
+        id: json['id'],
         email: json['email'],
         firstName: json['first_name'],
         lastName: json['last_name'],
