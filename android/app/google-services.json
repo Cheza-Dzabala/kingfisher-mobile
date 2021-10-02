@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "930481316378",
+    "project_id": "kingfisher-d75a9",
+    "storage_bucket": "kingfisher-d75a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930481316378:android:8343c2636eb6842b73e7a3",
+        "android_client_info": {
+          "package_name": "com.axistech.kingfisher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930481316378-ol1s91aei2lne0o6asqhsv2jmn0j34lv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArPkMfpPd-zBiExl9a2xOTxY0pTNE-5Yo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930481316378-ol1s91aei2lne0o6asqhsv2jmn0j34lv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
