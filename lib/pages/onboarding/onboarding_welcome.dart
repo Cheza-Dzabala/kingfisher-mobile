@@ -1,13 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kingfisher/models/kingfisher_user.dart';
-import 'package:kingfisher/notifiers/user_notifier.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_location.dart';
+import 'package:kingfisher/providers/user_provider.dart';
 import 'package:kingfisher/services/locator.dart';
+import 'package:kingfisher/services/profile_service.dart';
+import 'package:kingfisher/theme/colors.dart';
 import 'package:kingfisher/utils/constants.dart';
 import 'package:kingfisher/utils/decorations.dart';
 import 'package:kingfisher/widgets/app_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class OnboardingWelcome extends StatefulWidget {
+class OnboardingWelcome extends ConsumerStatefulWidget {
   static String id = '/onboarding_welcome';
   const OnboardingWelcome({Key key}) : super(key: key);
 
@@ -15,23 +24,59 @@ class OnboardingWelcome extends StatefulWidget {
   _OnboardingWelcomeState createState() => _OnboardingWelcomeState();
 }
 
-class _OnboardingWelcomeState extends State<OnboardingWelcome> {
-  ValueNotifier<KingfisherUser> _user = getIt<UserNotifier>().user;
-
+class _OnboardingWelcomeState extends ConsumerState<OnboardingWelcome> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
 
+  bool isLoadingImage = false;
+  final _profileService = getIt<ProfileService>();
+
   final _formKey = GlobalKey<FormState>();
+
+  _selectProfilePicture() async {
+    final ImagePicker _picker = ImagePicker();
+    // Get permissions for gallery
+    var status = await Permission.photos.request();
+
+    if (status == PermissionStatus.permanentlyDenied) {
+      openAppSettings();
+    } else {
+      XFile image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        try {
+          setState(() {
+            isLoadingImage = true;
+          });
+          String avatarUrl =
+              await _profileService.uploadAvatar(file: File(image.path));
+          ref.read(userProvider).state.avatar = avatarUrl;
+          setState(() {
+            isLoadingImage = false;
+          });
+        } catch (e) {
+          print('Upload error $e');
+          setState(() {
+            isLoadingImage = false;
+          });
+          Get.snackbar(
+            'Error',
+            'Avatar Upload Error',
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+          );
+        }
+      }
+    }
+  }
 
   _handleSubmit({@required BuildContext context}) {
     if (!_formKey.currentState.validate()) {
       return;
     } else {
-      _user.value.firstName = _firstNameController.text;
-      _user.value.lastName = _lastNameController.text;
-      _user.value.phoneNumber = _phoneNumberController.text;
-
+      ref.read(userProvider).state.firstName = _firstNameController.text;
+      ref.read(userProvider).state.lastName = _lastNameController.text;
+      ref.read(userProvider).state.phoneNumber = _phoneNumberController.text;
       Navigator.of(context).pushNamed(OnboardingLocation.id);
     }
   }
@@ -47,6 +92,7 @@ class _OnboardingWelcomeState extends State<OnboardingWelcome> {
 
   @override
   Widget build(BuildContext context) {
+    var _user = ref.watch(userProvider);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -74,6 +120,38 @@ class _OnboardingWelcomeState extends State<OnboardingWelcome> {
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: PRIMARY_COLOR,
+                    width: 1,
+                  ),
+                ),
+                child: Center(
+                  child: IconButton(
+                    iconSize: 60,
+                    onPressed: () => _selectProfilePicture(),
+                    icon: isLoadingImage
+                        ? CircularProgressIndicator(
+                            color: PRIMARY_COLOR,
+                          )
+                        : _user.state.avatar.isEmpty
+                            ? SvgPicture.asset(
+                                'assets/svgs/camera.svg',
+                              )
+                            : CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(_user.state.avatar),
+                                radius: 60,
+                              ),
+                  ),
+                ),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,

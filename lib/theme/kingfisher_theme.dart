@@ -7,18 +7,16 @@ ThemeData kingfisherTheme() {
   return ThemeData(
     fontFamily: 'Poppins',
     primaryColor: PRIMARY_COLOR,
-    accentColor: ACCENT_COLOR,
+    // accentColor: ACCENT_COLOR,
     backgroundColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
       color: Colors.white,
       elevation: 0,
-      textTheme: TextTheme(
-        title: TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+      toolbarTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
       ),
     ),
     textTheme: TextTheme(

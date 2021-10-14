@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:kingfisher/pages/home.dart';
+import 'package:kingfisher/providers/user_provider.dart';
 import 'package:kingfisher/services/locator.dart';
 import 'package:kingfisher/services/profile_service.dart';
 import 'package:kingfisher/theme/colors.dart';
@@ -8,7 +10,7 @@ import 'package:kingfisher/utils/decorations.dart';
 import 'package:kingfisher/widgets/app_bar.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class OnboardingFinish extends StatefulWidget {
+class OnboardingFinish extends ConsumerStatefulWidget {
   static String id = '/onboarding_finish';
   const OnboardingFinish({Key key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class OnboardingFinish extends StatefulWidget {
   _OnboardingFinishState createState() => _OnboardingFinishState();
 }
 
-class _OnboardingFinishState extends State<OnboardingFinish> {
+class _OnboardingFinishState extends ConsumerState<OnboardingFinish> {
   final _profileService = getIt<ProfileService>();
   bool isInAsyncCall = false;
 
@@ -25,7 +27,7 @@ class _OnboardingFinishState extends State<OnboardingFinish> {
       setState(() {
         isInAsyncCall = true;
       });
-      await _profileService.createProfile();
+      await _profileService.createProfile(user: ref.read(userProvider).state);
       setState(() {
         isInAsyncCall = false;
       });
