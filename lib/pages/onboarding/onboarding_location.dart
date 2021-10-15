@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kingfisher/models/kingfisher_user.dart';
-import 'package:kingfisher/notifiers/user_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_finish.dart';
-import 'package:kingfisher/services/locator.dart';
+import 'package:kingfisher/providers/user_provider.dart';
 import 'package:kingfisher/utils/constants.dart';
 import 'package:kingfisher/utils/decorations.dart';
 import 'package:kingfisher/utils/lists.dart';
 import 'package:kingfisher/widgets/app_bar.dart';
 import 'package:select_form_field/select_form_field.dart';
 
-class OnboardingLocation extends StatefulWidget {
+class OnboardingLocation extends ConsumerStatefulWidget {
   static String id = '/onboarding_location';
   const OnboardingLocation({Key key}) : super(key: key);
 
@@ -17,8 +16,7 @@ class OnboardingLocation extends StatefulWidget {
   _OnboardingLocationState createState() => _OnboardingLocationState();
 }
 
-class _OnboardingLocationState extends State<OnboardingLocation> {
-  ValueNotifier<KingfisherUser> _user = getIt<UserNotifier>().user;
+class _OnboardingLocationState extends ConsumerState<OnboardingLocation> {
   // Create a text controller for city of residence
   final _cityOfResidenceController = TextEditingController();
 
@@ -28,7 +26,8 @@ class _OnboardingLocationState extends State<OnboardingLocation> {
     if (!_formKey.currentState.validate()) {
       return;
     } else {
-      _user.value.cityOfResidence = _cityOfResidenceController.text;
+      ref.read(userProvider).state.cityOfResidence =
+          _cityOfResidenceController.text;
       Navigator.of(context).pushNamed(OnboardingFinish.id);
     }
   }

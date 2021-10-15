@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:kingfisher/pages/authentication/login.dart';
 import 'package:kingfisher/pages/authentication/signup.dart';
@@ -71,20 +72,23 @@ class Kingfisher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: kingfisherTheme(),
-          title: 'Kingfisher',
-          initialRoute: Landing.id,
-          routes: {
-            Landing.id: (context) => Landing(),
-            Login.id: (context) => Login(),
-            Signup.id: (context) => Signup(),
-            OnboardingWelcome.id: (context) => OnboardingWelcome(),
-            OnboardingLocation.id: (context) => OnboardingLocation(),
-            OnboardingFinish.id: (context) => OnboardingFinish(),
-            Home.id: (context) => Home(),
-          }),
+      debugShowCheckedModeBanner: false,
+      home: ProviderScope(
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: kingfisherTheme(),
+            title: 'Kingfisher',
+            initialRoute: Landing.id,
+            routes: {
+              Landing.id: (context) => Landing(),
+              Login.id: (context) => Login(),
+              Signup.id: (context) => Signup(),
+              OnboardingWelcome.id: (context) => OnboardingWelcome(),
+              OnboardingLocation.id: (context) => OnboardingLocation(),
+              OnboardingFinish.id: (context) => OnboardingFinish(),
+              Home.id: (context) => Home(),
+            }),
+      ),
     );
   }
 }

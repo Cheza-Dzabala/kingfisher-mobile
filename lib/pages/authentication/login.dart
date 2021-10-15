@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:kingfisher/models/kingfisher_user.dart';
 import 'package:kingfisher/pages/authentication/signup.dart';
 import 'package:kingfisher/pages/home.dart';
+import 'package:kingfisher/providers/user_provider.dart';
 import 'package:kingfisher/services/authentication_service.dart';
 import 'package:kingfisher/services/locator.dart';
+import 'package:kingfisher/services/profile_service.dart';
 import 'package:kingfisher/theme/colors.dart';
 import 'package:kingfisher/utils/constants.dart';
 import 'package:kingfisher/utils/decorations.dart';
@@ -11,7 +15,7 @@ import 'package:kingfisher/widgets/app_bar.dart';
 import 'package:kingfisher/widgets/elements/back_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   static String id = '/login';
   const Login({Key key}) : super(key: key);
 
@@ -19,13 +23,15 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
+  KingfisherUser user;
   final _formKey = GlobalKey<FormState>();
   final _authService = getIt<AuthenticationService>();
   bool _isLoading = false;
   // Create a text editing conntroller called _emailController to get the text from the text field
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  ProfileService _profileService = getIt<ProfileService>();
 
   _handeSubmit({BuildContext context}) async {
     if (!_formKey.currentState.validate()) {
@@ -36,7 +42,12 @@ class _LoginState extends State<Login> {
         _isLoading = true;
       });
       await _authService.login(
-          email: _emailController.text, password: _passwordController.text);
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      user = await _profileService.getProfile();
+      var readProvider = ref.read(userProvider);
+      readProvider.state = user;
       Navigator.pushNamed(context, Home.id);
       setState(() {
         _isLoading = false;
@@ -118,6 +129,10 @@ class _LoginState extends State<Login> {
                             labelText: 'Email',
                             labelStyle: Theme.of(context).textTheme.bodyText1,
                           ),
+                          validator: (value) {
+                            if (value.isEmpty) return 'Please enter email';
+                            return null;
+                          },
                         ),
                         // Created a space of 20 between
                         SizedBox(
@@ -130,6 +145,10 @@ class _LoginState extends State<Login> {
                             labelStyle: Theme.of(context).textTheme.bodyText1,
                           ),
                           obscureText: true,
+                          validator: (value) {
+                            if (value.isEmpty) return 'Please enter password';
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: SPACE_IN_FORM,

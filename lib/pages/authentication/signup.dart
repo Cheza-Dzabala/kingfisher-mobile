@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:kingfisher/pages/authentication/login.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_welcome.dart';
+import 'package:kingfisher/providers/user_provider.dart';
 import 'package:kingfisher/services/authentication_service.dart';
 import 'package:kingfisher/services/locator.dart';
 import 'package:kingfisher/theme/colors.dart';
@@ -11,7 +13,7 @@ import 'package:kingfisher/widgets/app_bar.dart';
 import 'package:kingfisher/widgets/elements/back_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class Signup extends StatefulWidget {
+class Signup extends ConsumerStatefulWidget {
   static String id = '/signup';
   const Signup({Key key}) : super(key: key);
 
@@ -19,7 +21,7 @@ class Signup extends StatefulWidget {
   _SignupState createState() => _SignupState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupState extends ConsumerState<Signup> {
   final _authService = getIt<AuthenticationService>();
   // Create text editing controllers for email, password, and password confirmation
   final _emailController = TextEditingController();
@@ -38,6 +40,7 @@ class _SignupState extends State<Signup> {
       try {
         await _authService.signup(
             email: _emailController.text, password: _passwordController.text);
+        ref.read(userProvider).state.email = _emailController.text;
         setState(() {
           isLoading = false;
         });
