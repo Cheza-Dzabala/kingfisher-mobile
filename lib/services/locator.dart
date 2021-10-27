@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:kingfisher/services/authentication_service.dart';
 import 'package:kingfisher/services/profile_service.dart';
+import 'package:kingfisher/services/vehicle_service.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -9,4 +10,5 @@ setUpServiceLocator() {
       () => AuthenticationService());
 
   getIt.registerLazySingleton<ProfileService>(() => ProfileService());
+  getIt.registerLazySingleton<VehicleService>(() => VehicleService());
 }

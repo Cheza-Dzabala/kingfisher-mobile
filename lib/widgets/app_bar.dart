@@ -7,7 +7,10 @@ AppBar appBar({
   @required BuildContext context,
 }) =>
     AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.headline6,
+      ),
       automaticallyImplyLeading: backButton,
       leading: backButton ? backButtonWidget(context: context) : null,
     );

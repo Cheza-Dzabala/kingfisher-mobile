@@ -9,12 +9,13 @@ class HomeIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => print('Navigate'),
       child: Container(
-        width: 100.0,
-        height: 100.0,
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        width: 90.0,
+        height: 90.0,
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
         padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 0),
         decoration: BoxDecoration(
           color: Colors.white,

@@ -147,7 +147,7 @@ class _HomeState extends ConsumerState<Home> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(15.0),
-                  height: MediaQuery.of(context).size.height * 0.70,
+                  height: MediaQuery.of(context).size.height * 0.65,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
