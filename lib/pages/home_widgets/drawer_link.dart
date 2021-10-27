@@ -30,7 +30,7 @@ class DrawerLink extends StatelessWidget {
         ),
         onTap: () {
           Navigator.pop(context);
-          // Navigator.pushNamed(context, drawerItem.link);
+          Navigator.of(context).pushNamed(drawerItem.link);
         },
       ),
     );

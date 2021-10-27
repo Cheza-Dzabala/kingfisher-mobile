@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kingfisher/models/kingfisher_user.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_location.dart';
 import 'package:kingfisher/providers/user_provider.dart';
 import 'package:kingfisher/services/locator.dart';

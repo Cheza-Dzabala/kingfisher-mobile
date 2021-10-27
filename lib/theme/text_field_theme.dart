@@ -10,11 +10,11 @@ InputDecorationTheme kingfisherInputDecorationTheme() {
     labelStyle: TextStyle(
       color: Colors.black45,
       letterSpacing: 1.0,
-      fontSize: 15.0,
+      fontSize: 12.0,
     ),
     hintStyle: TextStyle(
-      color: Colors.black,
-      fontSize: 13.0,
+      color: Colors.black45,
+      fontSize: 12.0,
     ),
     border: OutlineInputBorder(
       borderSide: BorderSide.none,

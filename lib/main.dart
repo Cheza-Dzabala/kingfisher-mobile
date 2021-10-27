@@ -9,6 +9,9 @@ import 'package:kingfisher/pages/landing.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_finish.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_location.dart';
 import 'package:kingfisher/pages/onboarding/onboarding_welcome.dart';
+import 'package:kingfisher/pages/vehicles/add_vehicle.dart';
+import 'package:kingfisher/pages/vehicles/vehicles.dart';
+import 'package:kingfisher/pages/vehicles/view_vehicle.dart';
 import 'package:kingfisher/services/locator.dart';
 import 'package:kingfisher/theme/kingfisher_theme.dart';
 
@@ -87,6 +90,11 @@ class Kingfisher extends StatelessWidget {
               OnboardingLocation.id: (context) => OnboardingLocation(),
               OnboardingFinish.id: (context) => OnboardingFinish(),
               Home.id: (context) => Home(),
+              Vehicles.id: (context) => Vehicles(),
+              AddVehicle.id: (context) => AddVehicle(),
+              ViewVehicle.id: (context) => ViewVehicle(
+                    vehicle: ModalRoute.of(context).settings.arguments,
+                  ),
             }),
       ),
     );
